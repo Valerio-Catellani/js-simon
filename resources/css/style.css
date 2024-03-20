@@ -1,6 +1,18 @@
 .cell {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+    background: rgb(220, 63, 251);
+    background: radial-gradient(circle, rgba(220, 63, 251, 1) 0%, rgba(0, 0, 0, 1) 99%);
+}
+
+body {
+    background-image: url(../img/background.jpg);
+    background-size: cover;
+    color: white;
+}
+
+h4 {
+    -webkit-text-stroke: 0.2px rgb(255, 255, 255);
 }
 
 
@@ -8,10 +20,10 @@
 /* CSS */
 .button-49,
 .button-49:after {
-    width: 150px;
-    height: 76px;
+    width: 250px;
+    height: 100px;
     line-height: 78px;
-    font-size: 20px;
+    font-size: 40px;
     font-family: 'Bebas Neue', sans-serif;
     background: linear-gradient(45deg, transparent 5%, #FF013C 5%);
     border: 0;
@@ -111,8 +123,8 @@
 
     .button-49,
     .button-49:after {
-        width: 200px;
-        height: 86px;
+        width: 400px;
+        height: 100px;
         line-height: 88px;
     }
 }

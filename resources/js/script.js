@@ -29,6 +29,7 @@ sendButton.addEventListener("click", () => play())
 function play() {
     sendButton.disabled = true;
     reset()
+    sendButton.innerHTML = "Restart Game"
     const Wrapper = document.createElement('div');
     Wrapper.id = "wrapper";
     Wrapper.className = "container d-flex justify-content-center align-items-center p-5 my-3";
@@ -36,13 +37,14 @@ function play() {
     App.append(Wrapper)
     setTimeout(() => {
         sendButton.disabled = false;
-        document.getElementById("wrapper").classList.add("opacity-0")
+
+        opacity(Wrapper)
         for (let i = 0; i < arrayNumbers.length; i++) {
             App.appendChild(generateQuestions(i + 1));
         }
         App.append(generateResultsButton(arrayNumbers))
 
-    }, 30000)
+    }, 1000)
 }
 
 //^ FUNCTION: RESET
@@ -125,7 +127,7 @@ function generateResultsButton(arrayNumbers) {
             userValueArray.push(parseInt(element.value))
             element.disabled = true
         })
-        document.getElementById("wrapper").classList.remove("opacity-0")
+        opacity(document.getElementById("wrapper"))
         compare(arrayNumbers, userValueArray);
         this.remove()
     })
@@ -209,3 +211,24 @@ function modalEnd(score, condition) {
     return BackGroundBlack
 }
 
+//!------my bonus ------------
+//^ FUNCTION opacity
+function opacity(element) {
+    let opacity = parseFloat(getComputedStyle(element).opacity);
+    let increment = opacity >= 1 ? -0.1 : 0.1;
+
+    const intervallo = setInterval(() => {
+        opacity += increment;
+        element.style.opacity = opacity.toString();
+
+
+        if ((opacity <= 0 && increment < 0) || (opacity >= 1 && increment > 0)) {
+            clearInterval(intervallo);
+            element.style.opacity = increment < 0 ? '0' : '1';
+        }
+    }, 30);
+}
+
+
+
+//^FUNCTION: Timer
