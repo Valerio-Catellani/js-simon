@@ -16,6 +16,7 @@ TODO        Buon pomeriggio e buon lavoro !!!! :muscolo:
 */
 
 const sendButton = document.getElementById("send-button");
+const App = document.getElementById("app")
 
 //console.log(document.querySelector("body").style);
 
@@ -26,33 +27,41 @@ sendButton.addEventListener("click", () => play())
 
 function play() {
     sendButton.disabled = true;
-    document.getElementById("wrapper") ? document.getElementById("wrapper").remove() : "";
+    reset()
     const Wrapper = document.createElement('div');
     Wrapper.id = "wrapper";
     Wrapper.className = "container d-flex justify-content-center align-items-center p-5 my-3";
     let arrayNumbers = generateNumbers(Wrapper, 5)
-    sendButton.parentNode.insertBefore(Wrapper, sendButton.nextSibling);
+    App.append(Wrapper)
     setTimeout(() => {
         sendButton.disabled = false;
         document.querySelectorAll(".cell").forEach(element => {
             element.classList.add("d-none")
         })
-        for (let i = arrayNumbers.length - 1; i >= 0; i--) {
-            sendButton.parentNode.insertBefore(generateQuestions(i + 1), sendButton.nextSibling);
+        for (let i = 0; i < arrayNumbers.length; i++) {
+            App.appendChild(generateQuestions(i + 1));
         }
-    }, 3000)
+        App.append(generateResultsButton())
+
+    }, 1000)
 }
 
-/* 
-^ FUNCTION: genetateNumbers
-*/
+//^ FUNCTION: RESET
+function reset() {
+    document.getElementById("wrapper") ? document.getElementById("wrapper").remove() : "";
+    console.log(document.querySelectorAll("answer-container"));
+    document.querySelectorAll(".answer-container").length > 0 ? document.querySelectorAll(".answer-container").forEach(element => {
+        element.remove()
+    }) : "";
+}
+
+
+//^ FUNCTION: genetateNumbers
 /**
  * A function that generate unique numbersa
  * @param {*} difficulty 
  * @returns 
 */
-
-
 function generateNumbers(container, difficulty) {
     let arrayNumbers = [];
     while (arrayNumbers.length < difficulty) {
@@ -77,21 +86,58 @@ function cellGenerator(number) {
 
 
 //^ FUNCTION: generateQuestions
-generateQuestions(4)
 function generateQuestions(index) {
     const container = document.createElement('div');
-    container.className = "my-3";
+    container.className = "my-3 answer-container";
     const label = document.createElement('label');
     label.htmlFor = `user-input-${index}`;
     label.className = "form-label";
     label.innerHTML = `Insert the ${index}` + (index === 1 ? "st" : index === 2 ? "nd" : "th") + " number:"
-    const input = document.createElement('div');
-    input.type = "number";
-    input.className = "form-control"
+    const input = document.createElement('input');
     input.id = `user-input-${index}`;
-    input.placeholder = "insert the specified number"
-    container.append(label, input)
+    input.className = "form-control border-danger bg-danger-subtle border-4";
+    input.setAttribute("type", "number");
+    input.setAttribute("placeholder", "insert the specified number");
+    input.addEventListener("input", () => {
+        if (!(input.value === "" || isNaN(input.value))) {
+            input.classList.remove("border-danger")
+            input.classList.remove("bg-danger-subtle")
+            input.classList.add("border-success")
+            input.classList.add("bg-success-subtle")
+            enableButton(5);
+        } else {
+            input.classList.add("border-danger")
+            input.classList.add("bg-danger-subtle")
+            input.classList.remove("border-success")
+            input.classList.remove("bg-success-subtle")
+        }
+    })
+    container.append(label, input);
     return container
+}
+
+
+
+//^ FUNCTION: generateResultButton
+
+function generateResultsButton() {
+    const resultsButton = document.createElement('button');
+    resultsButton.id = "result-button";
+    resultsButton.type = "button";
+    resultsButton.className = "btn btn-lg btn-warning";
+    resultsButton.innerHTML = "Check Results";
+    resultsButton.disabled = true;
+    return resultsButton
+}
+
+//^ FUNCTION: enableButton 
+function enableButton(elementToEnable) {
+    let counter = 0;
+    document.querySelectorAll(".answer-container").forEach(element => {
+        element.lastChild.classList.contains("bg-success-subtle") ? counter++ : ""
+    })
+    let buttonToEnable = document.getElementById("result-button")
+    return counter === elementToEnable ? buttonToEnable.disabled = false : buttonToEnable.disabled = true
 }
 
 
