@@ -42,7 +42,7 @@ function play() {
         }
         App.append(generateResultsButton(arrayNumbers))
 
-    }, 1000)
+    }, 30000)
 }
 
 //^ FUNCTION: RESET
@@ -78,7 +78,7 @@ function generateNumbers(container, difficulty) {
 function cellGenerator(number) {
     const Cell = document.createElement('div');
     Cell.id = `cell-${number}`
-    Cell.className = "cell d-flex justify-content-center align-items-center border rounded-circle border-5 p-5 m-3";
+    Cell.className = "cell d-flex justify-content-center align-items-center border rounded-circle border-5  p-5 m-3 fs-1 fw-bold";
     Cell.innerHTML = number;
     return Cell
 }
@@ -116,16 +116,18 @@ function generateResultsButton(arrayNumbers) {
     const resultsButton = document.createElement('button');
     resultsButton.id = "result-button";
     resultsButton.type = "button";
-    resultsButton.className = "btn btn-lg btn-warning my-4";
+    resultsButton.className = "button-49 btn-warning my-4";
     resultsButton.innerHTML = "Check Results";
     resultsButton.disabled = true;
-    resultsButton.addEventListener('click', () => {
+    resultsButton.addEventListener('click', function () {
         let userValueArray = [];
         document.querySelectorAll(".user-input-value").forEach(element => {
             userValueArray.push(parseInt(element.value))
+            element.disabled = true
         })
         document.getElementById("wrapper").classList.remove("opacity-0")
-        compare(arrayNumbers, userValueArray)
+        compare(arrayNumbers, userValueArray);
+        this.remove()
     })
     return resultsButton
 }
@@ -143,12 +145,13 @@ function enableButton(elementToEnable) {
 
 //^ FUNCTION: compare
 function compare(numbers, answer) {
-
+    let count = 0;
     for (let i = 0; i < numbers.length; i++) {
         let cell = document.getElementById(`cell-${numbers[i]}`);
         let input = document.getElementById(`user-input-${i + 1}`);
         let message = document.createElement('h4');
         if (numbers[i] === answer[i]) {
+            count++
             changeColor(cell, "success");
             changeColor(input, "success");
             message.className = "text-success text-center"
@@ -162,8 +165,8 @@ function compare(numbers, answer) {
             input.parentElement.append(message);
         }
     }
+    document.body.prepend(modalEnd(count, 5))
 }
-
 //^ FUCNTION changeColor
 function changeColor(element, type) {
     if (type === "success") {
@@ -177,5 +180,32 @@ function changeColor(element, type) {
         element.classList.remove("border-success")
         element.classList.remove("bg-success-subtle")
     }
+}
 
-} 
+
+//^ FUNCTION MODAL END
+function modalEnd(score, condition) {
+    const BackGroundBlack = document.createElement('div');
+    BackGroundBlack.id = "hype-modal"
+    BackGroundBlack.className = "position-absolute w-100 h-100 overflow-hidden d-flex align-items-center justify-conentent-center position-fixed";
+    BackGroundBlack.style = "z-index:100; left:0; top:0; background-color: rgba(0, 0, 0, 0.4);";
+    const EndBanner = document.createElement('div');
+    EndBanner.className = "mx-auto d-flex align-items-center justify-content-center flex-column";
+    EndBanner.style = "width:700px; height:700px;";
+    EndBanner.id = `${score === 5 ? "win" : "lose"}-banner`
+    const EndText = document.createElement('h2');
+    EndText.className = "text-white text-center";
+    EndText.style = "font-size:5rem; -webkit-text-stroke: 1px black; ";
+    EndText.innerHTML = `You found ${score}/${condition}! <p class='fs-1'>Total Points: ${score}</p>`;
+    const EndButton = document.createElement('button')
+    EndButton.id = "end"
+    EndButton.className = `btn btn-lg bg-${score !== 5 ? "danger" : "success"}`
+    EndButton.innerHTML = score !== 5 ? `Try Again` : "Play Again!"
+    EndButton.addEventListener('click', () => {
+        document.getElementById("hype-modal").remove()
+    })
+    EndBanner.append(EndText, EndButton)
+    BackGroundBlack.appendChild(EndBanner);
+    return BackGroundBlack
+}
+
