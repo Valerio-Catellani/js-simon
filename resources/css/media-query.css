@@ -1,19 +1,20 @@
 /*** MEDIA QUERY - MOBILE FIRST ***/
 /*(min-width=da valore fino a infinito)*/
 
-/* @media all and (min-width: 576px) {} /**/
+/* @media all and (min-width: 576px) {} /**sm**/
 /*
 
-@media all and (min-width: 768px) {}/**/
+@media all and (min-width: 768px) {}/**md**/
 /*
 
-@media all and (min-width: 992px) {}/**/
+@media all and (min-width: 992px) {}/**lg**/
 /*
 
-@media all and (min-width: 1200px) {}/**/
+@media all and (min-width: 1200px) {}/**xl**/
 /*
 
-@media all and (min-width: 1400px) {} */
+@media all and (min-width: 1400px) {}/**xxl**/
+
 
 /*** MEDIA QUERY - DESKTOP FIRST ***/
 /*(max-width=da 0 fino a valore)*/
@@ -27,3 +28,22 @@
 @media all and (max-width: 768px) {}
 
 @media all and (max-width: 576px) {} */
+
+
+
+@media all and (max-width: 992px) {
+    .cell {
+        min-width: 120px;
+        width: 120px;
+        min-height: 120px;
+        height: 120px;
+    }
+}
+
+@media all and (max-width: 768px) {
+
+    .button-49,
+    .button-49:after {
+        font-size: 30px;
+    }
+}

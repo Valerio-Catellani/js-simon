@@ -5,7 +5,7 @@ TODO        nome repo: js-simon
 TODO        Descrizione:
 TODO        Visualizzare in pagina 5 numeri casuali ( tra 1 e 100) non duplicati.
 TODO        Da lì parte un timer di 30 secondi.
-TODO        Dopo i 30 secondi i numeri scompaiono e l'utente deve inserire, uno alla volta, i numeri che ha visto        TODO        precedentemente, tramite il prompt() ( o meglio caselle di input).
+TODO        Dopo i 30 secondi i numeri scompaiono e l'utente deve inserire, uno alla volta, i numeri che ha visto        TODO        precedentemente, tramite il prompt()  ( o meglio caselle di input).
 TODO        Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei numeri da indovinare sono stati 
 todo        individuati.
 TODO        Consigli del giorno:
@@ -18,33 +18,35 @@ TODO        Buon pomeriggio e buon lavoro !!!! :muscolo:
 const sendButton = document.getElementById("send-button");
 const App = document.getElementById("app")
 
-//console.log(document.querySelector("body").style);
-
-
-
-
 sendButton.addEventListener("click", () => play())
 
 //^ FUNCTION: play
 function play() {
-    sendButton.disabled = true;
-    reset()
-    sendButton.innerHTML = "Restart Game"
+    sendButton.disabled = true; //disable the pay button to prevent indesidered effect with the settimeout
+    reset(); //reset function
+    sendButton.innerHTML = "Restart Game"; //chenage the html of the button
+    //--- element: wrapper
     const Wrapper = document.createElement('div');
     Wrapper.id = "wrapper";
-    Wrapper.className = "container d-flex justify-content-center align-items-center p-5 my-3";
-    const arrayNumbers = generateNumbers(Wrapper, 5)
-    App.append(Wrapper)
+    Wrapper.className = "container d-flex justify-content-center fle align-items-center flex-column flex-md-row p-3 my-3";
+    const arrayNumbers = generateNumbers(Wrapper, 5);
+    App.append(Wrapper);
+    //--- element: timer
+    const Timer = document.createElement('h3');
+    Timer.id = "timer";
+    Timer.innerHTML = "Time remaning: <span id='timer-seconds'></span>s";
+    App.append(Timer);
+    timer(30000);
+    //--- timout for 30s
     setTimeout(() => {
         sendButton.disabled = false;
-
         opacity(Wrapper)
         for (let i = 0; i < arrayNumbers.length; i++) {
             App.appendChild(generateQuestions(i + 1));
         }
         App.append(generateResultsButton(arrayNumbers))
 
-    }, 1000)
+    }, 31000)
 }
 
 //^ FUNCTION: RESET
@@ -105,6 +107,7 @@ function generateQuestions(index) {
             enableButton(5);
         } else {
             changeColor(input, "fail")
+            enableButton(5);
         }
     })
     container.append(label, input);
@@ -194,7 +197,7 @@ function modalEnd(score, condition) {
     const EndBanner = document.createElement('div');
     EndBanner.className = "mx-auto d-flex align-items-center justify-content-center flex-column";
     EndBanner.style = "width:700px; height:700px;";
-    EndBanner.id = `${score === 5 ? "win" : "lose"}-banner`
+    EndBanner.id = `banner`
     const EndText = document.createElement('h2');
     EndText.className = "text-white text-center";
     EndText.style = "font-size:5rem; -webkit-text-stroke: 1px black; ";
@@ -211,7 +214,7 @@ function modalEnd(score, condition) {
     return BackGroundBlack
 }
 
-//!------my bonus ------------
+//!---------- my bonus ------------//
 //^ FUNCTION opacity
 function opacity(element) {
     let opacity = parseFloat(getComputedStyle(element).opacity);
@@ -230,5 +233,18 @@ function opacity(element) {
 }
 
 
-
+//!---------- my bonus ------------//
 //^FUNCTION: Timer
+function timer(numberMilliseconds) {
+    let counter = numberMilliseconds / 1000;
+    let time = setInterval(() => {
+        document.getElementById('timer-seconds').innerHTML = counter
+        if (counter === 0) {
+            clearInterval(time);
+            document.getElementById('timer').remove();
+        } else {
+            counter--;
+        }
+    }, 1000)
+}
+
